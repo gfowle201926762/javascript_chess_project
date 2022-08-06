@@ -464,3 +464,208 @@ export var black_pawn_2 = new piece(4, 1, "pawn", "black", 26, true, true, false
 export const white_pieces = [white_king, white_pawn_3]
 export const black_pieces = [black_king, black_queen, black_pawn_1, black_pawn_2]
 export const all_pieces = [white_king, white_pawn_3, black_king, black_queen, black_pawn_1, black_pawn_2]*/
+
+
+
+// Checkmate possibility
+/*
+export var black_king = new piece(0, 0, "king", "black", 17, true, true, false, 10)
+
+export var white_king = new piece(6, 7, "king", "white", 1, true, true, false, 10)
+export var white_queen = new piece(6, 1, "queen", "white", 2, true, true, false, 9)
+export var white_castle_1 = new piece(7, 3, "castle", "white", 7, true, true, false, 5)
+
+export const white_pieces = [white_king, white_queen, white_castle_1]
+export const black_pieces = [black_king]
+export const all_pieces = [white_king, white_queen, white_castle_1, black_king]
+*/
+
+
+//checkmate in 4 (white to move)
+// doesn't work because on the 4th move the black king has a choice of going to two squares
+// if it goes to either two squares, checkmate is possible, but its still two squares
+/*
+export var white_king = new piece(6, 7, "king", "white", 1, false, true, false, 10)
+export var white_queen = new piece(6, 3, "queen", "white", 2, true, true, false, 9)
+export var white_castle_1 = new piece(3, 7, "castle", "white", 7, true, true, false, 5)
+export var white_bishop_2 = new piece(1, 6, "bishop", "white", 4, true, true, false, 3)
+export var white_pawn_1 = new piece(0, 6, "pawn", "white", 9, true, true, false, 1)
+export var white_pawn_2 = new piece(1, 5, "pawn", "white", 10, true, true, false, 1)
+export var white_pawn_3 = new piece(2, 6, "pawn", "white", 11, true, true, false, 1)
+export var white_pawn_6 = new piece(5, 6, "pawn", "white", 14, true, true, false, 1)
+export var white_pawn_7 = new piece(6, 6, "pawn", "white", 15, true, true, false, 1)
+export var white_pawn_8 = new piece(7, 6, "pawn", "white", 16, true, true, false, 1)
+
+export var black_king = new piece(6, 0, "king", "black", 17, false, true, false, 10)
+export var black_queen = new piece(1, 2, "queen", "black", 18, true, true, false, 9)
+export var black_bishop_1 = new piece(6, 2, "bishop", "black", 19, true, true, false, 3)
+export var black_castle_1 = new piece(5, 3, "castle", "black", 23, true, true, false, 5)
+
+export var black_pawn_1 = new piece(0, 1, "pawn", "black", 25, true, true, false, 1)
+export var black_pawn_2 = new piece(1, 1, "pawn", "black", 26, true, true, false, 1)
+export var black_pawn_3 = new piece(2, 1, "pawn", "black", 27, true, true, false, 1)
+export var black_pawn_6 = new piece(5, 1, "pawn", "black", 30, true, true, false, 1)
+export var black_pawn_7 = new piece(6, 1, "pawn", "black", 31, true, true, false, 1)
+export var black_pawn_8 = new piece(7, 3, "pawn", "black", 32, true, true, false, 1)
+
+export const white_pieces = [white_king, white_queen, white_castle_1, white_bishop_2,
+white_pawn_1, white_pawn_2, white_pawn_3, white_pawn_6, white_pawn_7, white_pawn_8]
+
+export const black_pieces = [black_king, black_queen, black_bishop_1, black_castle_1,
+black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_6, black_pawn_7, black_pawn_8]
+
+export const all_pieces = [white_king, white_queen, white_castle_1, white_bishop_2,
+white_pawn_1, white_pawn_2, white_pawn_3, white_pawn_6, white_pawn_7, white_pawn_8, black_king, black_queen, black_bishop_1, black_castle_1,
+black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_6, black_pawn_7, black_pawn_8]
+*/
+
+//checkate in 4 moves (white to move) THIS SHOULD WORK!!
+/*
+export var white_king = new piece(6, 7, "king", "white", 1, false, true, false, 10)
+export var white_queen = new piece(5, 1, "queen", "white", 2, true, true, false, 9)
+export var white_knight_1 = new piece(7, 4, "knight", "white", 5, true, true)
+export var white_bishop_2 = new piece(7, 2, "bishop", "white", 4, true, true, false, 3)
+export var white_pawn_1 = new piece(0, 6, "pawn", "white", 9, true, true, false, 1)
+export var white_pawn_3 = new piece(2, 6, "pawn", "white", 11, true, true, false, 1)
+export var white_pawn_6 = new piece(5, 6, "pawn", "white", 14, true, true, false, 1)
+export var white_pawn_7 = new piece(6, 6, "pawn", "white", 15, true, true, false, 1)
+export var white_pawn_8 = new piece(7, 6, "pawn", "white", 16, true, true, false, 1)
+
+export var black_king = new piece(7, 0, "king", "black", 17, false, true, false, 10)
+export var black_queen = new piece(1, 6, "queen", "black", 18, true, true, false, 9)
+export var black_bishop_1 = new piece(2, 2, "bishop", "black", 19, true, true, false, 3)
+export var black_castle_1 = new piece(6, 0, "castle", "black", 23, true, true, false, 5)
+
+export var black_pawn_1 = new piece(0, 2, "pawn", "black", 25, true, true, false, 1)
+
+export var black_pawn_6 = new piece(5, 2, "pawn", "black", 30, true, true, false, 1)
+export var black_pawn_8 = new piece(7, 1, "pawn", "black", 32, true, true, false, 1)
+
+export const white_pieces = [white_king, white_queen, white_knight_1, white_bishop_2,
+white_pawn_1, white_pawn_3, white_pawn_6, white_pawn_7, white_pawn_8]
+
+export const black_pieces = [black_king, black_queen, black_bishop_1, black_castle_1,
+black_pawn_1, black_pawn_6, black_pawn_8]
+
+export const all_pieces = [white_king, white_queen, white_knight_1, white_bishop_2,
+white_pawn_1, white_pawn_3, white_pawn_6, white_pawn_7, white_pawn_8, black_king, black_queen, black_bishop_1, black_castle_1,
+black_pawn_1, black_pawn_6, black_pawn_8]
+*/
+
+//checkmate in 4 (white to move)
+/*
+export var white_king = new piece(6, 7, "king", "white", 1, false, true, false, 10)
+export var white_queen = new piece(3, 5, "queen", "white", 2, true, true, false, 9)
+export var white_castle_1 = new piece(1, 1, "castle", "white", 7, true, true, false, 5)
+export var white_castle_2 = new piece(3, 1, "castle", "white", 8, true, true, false, 5)
+
+export var white_pawn_1 = new piece(0, 6, "pawn", "white", 9, true, true, false, 1)
+export var white_pawn_2 = new piece(5, 5, "pawn", "white", 10, true, true, false, 1)
+
+export var black_king = new piece(7, 0, "king", "black", 17, false, true, false, 10)
+export var black_queen = new piece(7, 5, "queen", "black", 18, true, true, false, 9)
+export var black_castle_1 = new piece(5, 0, "castle", "black", 23, true, true, false, 5)
+export var black_castle_2 = new piece(0, 0, "castle", "black", 24, true, true, false, 5)
+
+export var black_pawn_1 = new piece(6, 1, "pawn", "black", 25, true, true, false, 1)
+export var black_pawn_2 = new piece(7, 2, "pawn", "black", 26, true, true, false, 1)
+export var black_pawn_3 = new piece(6, 5, "pawn", "black", 27, true, true, false, 1)
+
+export const white_pieces = [white_king, white_queen, white_castle_1, white_castle_2,
+white_pawn_1, white_pawn_2]
+
+export const black_pieces = [black_king, black_queen, black_castle_1, black_castle_2,
+black_pawn_1, black_pawn_2, black_pawn_3]
+
+export const all_pieces = [white_king, white_queen, white_castle_1, white_castle_2,
+white_pawn_1, white_pawn_2, black_king, black_queen, black_castle_1, black_castle_2,
+black_pawn_1, black_pawn_2, black_pawn_3]
+*/
+
+
+// checkmate in 3 (white to move)
+/*
+export var white_king = new piece(7, 7, "king", "white", 1, false, true, false, 10)
+export var white_queen = new piece(6, 5, "queen", "white", 2, true, true, false, 9)
+export var white_bishop_1 = new piece(4, 3, "bishop", "white", 3, true, true, false, 3)
+export var white_bishop_2 = new piece(2, 4, "bishop", "white", 4, true, true, false, 3)
+
+export var white_castle_1 = new piece(3, 7, "castle", "white", 7, true, true, false, 5)
+export var white_castle_2 = new piece(5, 3, "castle", "white", 8, true, true, false, 5)
+
+export var white_pawn_1 = new piece(0, 6, "pawn", "white", 9, true, true, false, 1)
+export var white_pawn_2 = new piece(2, 5, "pawn", "white", 10, true, true, false, 1)
+export var white_pawn_3 = new piece(2, 6, "pawn", "white", 11, true, true, false, 1)
+
+export var white_pawn_7 = new piece(6, 6, "pawn", "white", 15, true, true, false, 1)
+export var white_pawn_8 = new piece(7, 6, "pawn", "white", 16, true, true, false, 1)
+
+
+export var black_king = new piece(7, 0, "king", "black", 17, false, true, false, 10)
+export var black_queen = new piece(4, 1, "queen", "black", 18, true, true, false, 9)
+export var black_bishop_1 = new piece(3, 0, "bishop", "black", 19, true, true, false, 3)
+export var black_bishop_2 = new piece(4, 2, "bishop", "black", 20, true, true, false, 3)
+
+export var black_castle_1 = new piece(5, 0, "castle", "black", 23, true, true, false, 5)
+export var black_castle_2 = new piece(0, 0, "castle", "black", 24, true, true, false, 5)
+
+export var black_pawn_1 = new piece(0, 2, "pawn", "black", 25, true, true, false, 1)
+export var black_pawn_2 = new piece(1, 3, "pawn", "black", 26, true, true, false, 1)
+export var black_pawn_3 = new piece(2, 1, "pawn", "black", 27, true, true, false, 1)
+
+export var black_pawn_7 = new piece(6, 1, "pawn", "black", 31, true, true, false, 1)
+export var black_pawn_8 = new piece(7, 1, "pawn", "black", 32, true, true, false, 1)
+
+export const white_pieces = [white_king, white_queen, white_castle_1, white_castle_2, white_bishop_1, white_bishop_2,
+white_pawn_1, white_pawn_2, white_pawn_3, white_pawn_7, white_pawn_8]
+
+export const black_pieces = [black_king, black_queen, black_castle_1, black_castle_2, black_bishop_1, black_bishop_2,
+black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_7, black_pawn_8]
+
+export const all_pieces = [white_king, white_queen, white_castle_1, white_castle_2, white_bishop_1, white_bishop_2,
+white_pawn_1, white_pawn_2, white_pawn_3, white_pawn_7, white_pawn_8, black_king, black_queen, black_castle_1, black_castle_2, black_bishop_1, black_bishop_2,
+black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_7, black_pawn_8]
+*/
+
+
+// checkmate in 2 moves
+/*
+export var white_king = new piece(7, 7, "king", "white", 1, false, true, false, 10)
+export var white_bishop_1 = new piece(4, 3, "bishop", "white", 3, true, true, false, 3)
+export var white_bishop_2 = new piece(2, 4, "bishop", "white", 4, true, true, false, 3)
+
+export var white_castle_1 = new piece(3, 7, "castle", "white", 7, true, true, false, 5)
+export var white_castle_2 = new piece(5, 3, "castle", "white", 8, true, true, false, 5)
+
+export var white_pawn_1 = new piece(0, 6, "pawn", "white", 9, true, true, false, 1)
+export var white_pawn_2 = new piece(2, 5, "pawn", "white", 10, true, true, false, 1)
+export var white_pawn_3 = new piece(2, 6, "pawn", "white", 11, true, true, false, 1)
+
+export var white_pawn_7 = new piece(6, 6, "pawn", "white", 15, true, true, false, 1)
+export var white_pawn_8 = new piece(7, 6, "pawn", "white", 16, true, true, false, 1)
+
+
+export var black_king = new piece(7, 0, "king", "black", 17, false, true, false, 10)
+export var black_queen = new piece(6, 1, "queen", "black", 18, true, true, false, 9)
+export var black_bishop_1 = new piece(3, 0, "bishop", "black", 19, true, true, false, 3)
+export var black_bishop_2 = new piece(4, 2, "bishop", "black", 20, true, true, false, 3)
+
+export var black_castle_1 = new piece(5, 0, "castle", "black", 23, true, true, false, 5)
+export var black_castle_2 = new piece(0, 0, "castle", "black", 24, true, true, false, 5)
+
+export var black_pawn_1 = new piece(0, 2, "pawn", "black", 25, true, true, false, 1)
+export var black_pawn_2 = new piece(1, 3, "pawn", "black", 26, true, true, false, 1)
+export var black_pawn_3 = new piece(2, 1, "pawn", "black", 27, true, true, false, 1)
+
+export var black_pawn_8 = new piece(7, 1, "pawn", "black", 32, true, true, false, 1)
+
+export const white_pieces = [white_king, white_castle_1, white_castle_2, white_bishop_1, white_bishop_2,
+white_pawn_1, white_pawn_2, white_pawn_3, white_pawn_7, white_pawn_8]
+
+export const black_pieces = [black_king, black_queen, black_castle_1, black_castle_2, black_bishop_1, black_bishop_2,
+black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_8]
+
+export const all_pieces = [white_king, white_castle_1, white_castle_2, white_bishop_1, white_bishop_2,
+white_pawn_1, white_pawn_2, white_pawn_3, white_pawn_7, white_pawn_8, black_king, black_queen, black_castle_1, black_castle_2, black_bishop_1, black_bishop_2,
+black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_8]
+*/

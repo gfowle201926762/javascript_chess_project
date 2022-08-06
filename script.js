@@ -1,7 +1,7 @@
 
 import { board_array, white_king, black_king, white_pieces, black_pieces, all_pieces} from './piece_class.js'
 import { game_board } from './board_class.js'
-import { get_legal_moves, check_for_check, generate_random_legal_move, play_move } from './game.js'
+import { get_legal_moves, check_for_check, generate_random_legal_move, play_move, computer_program_turn, computer_engine } from './game.js'
 
 const board = document.getElementById('board')
 
@@ -14,7 +14,7 @@ var end_game = true
 var previoustime = 0
 var result = null
 var menu_down = false
-var computer_type = 'random'
+var computer_type = 'program'
 var navigating = false
 var pause = false
 var previous_piece_moved = null
@@ -373,6 +373,9 @@ function game_finished(result){
 function computer_turn(computer_type, moves){
     if (computer_type == 'random'){
         var move = generate_random_legal_move(moves)
+    }
+    if (computer_type == 'program'){
+        var move = computer_engine.computer_program_turn(turn, previous_piece_moved)
     }
     play_move(move)
     game_board.clear_array()
@@ -1088,6 +1091,10 @@ function start_game(){
         piece.reset()
     })
 
+    // DONT FORGET TO DELETE THIS!!
+    black_king.first_turn = false
+    white_king.first_turn = false
+
     game_board.orientation = 'white'
     game_board.clear_array()
     game_board.draw_pieces()
@@ -1107,6 +1114,15 @@ function start_game(){
     if (turn == 'white' && white_player == 'computer' && black_player == 'human'){
         var moves = get_legal_moves(turn, previous_piece_moved)
         computer_turn(computer_type, moves)
+
+        var moves = get_legal_moves(turn, previous_piece_moved)
+        var in_check = check_for_check(turn, previous_piece_moved)
+        check_game_finished(moves, in_check)
+
+        if (end_game == true){
+            game_finished(result)
+        }
+
     }
     
     if (white_player == 'computer' && black_player == 'computer'){
