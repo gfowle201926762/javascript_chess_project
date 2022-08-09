@@ -1,7 +1,7 @@
 
 import { board_array, white_king, black_king, white_pieces, black_pieces, all_pieces} from './piece_class.js'
 import { game_board } from './board_class.js'
-import { get_legal_moves, check_for_check, generate_random_legal_move, play_move, computer_program_turn, computer_engine } from './game.js'
+import { get_legal_moves, check_for_check, generate_random_legal_move, play_move, computer_engine } from './game.js'
 
 const board = document.getElementById('board')
 
@@ -402,8 +402,10 @@ function computer_turn(computer_type, moves){
         game_board.draw_pieces(4 + increment, move[3].y,  move[3].x, move[3].y, false)
         game_board.update_sequence(4 + increment, move[3].y,  move[3].x, move[3].y, false)
     }
+    
+
     if (castling == false){
-        game_board.draw_pieces(move[4], move[5], move[2], move[1], taking)
+        game_board.draw_pieces(move[4], move[5], move[2], move[1], taking) // we need [4] and [5] because the [0] piece .x and .y have already changed to their new locations.
         game_board.update_sequence(move[4], move[5], move[2], move[1], taking)
     }
 
@@ -466,6 +468,7 @@ function handleloop(currentTime){
         check_game_finished(moves, in_check)
 
         if (end_game == false && menu_down == false && navigating == false && pause == false){
+            
             computer_turn(computer_type, moves)
         }
 

@@ -283,8 +283,7 @@ export class piece{
                         // we need to check another piece. The piece at this index, and if it matches the last piece played.
                         //console.log(previous_piece_moved.identifier)
                         if (previous_piece_moved.identifier == board_array[this.y][this.x + 1]){ // the previous piece moved identifier is the same as the board index.
-                            board_array[this.y + i][this.x + 1] = previous_piece_moved.identifier + 100
-                            //console.log("EN PASSANT IS POSSIBLE")
+                            board_array[this.y + i][this.x + 1] = previous_piece_moved.identifier + 100 
                         }
                     }
                 }
@@ -294,7 +293,6 @@ export class piece{
                         //console.log(previous_piece_moved.identifier)
                         if (previous_piece_moved.identifier == board_array[this.y][this.x - 1]){ // the previous piece moved identifier is the same as the board index.
                             board_array[this.y + i][this.x - 1] = previous_piece_moved.identifier + 100
-                            //console.log("EN PASSANT IS POSSIBLE")
                         }
                     }
                 }
@@ -516,8 +514,8 @@ black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_6, black_pawn_7, black_pawn
 
 export const all_pieces = [white_king, white_queen, white_castle_1, white_bishop_2,
 white_pawn_1, white_pawn_2, white_pawn_3, white_pawn_6, white_pawn_7, white_pawn_8, black_king, black_queen, black_bishop_1, black_castle_1,
-black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_6, black_pawn_7, black_pawn_8]
-*/
+black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_6, black_pawn_7, black_pawn_8]*/
+
 
 //checkate in 4 moves (white to move) THIS SHOULD WORK!!
 /*

@@ -29,7 +29,6 @@ export function check_for_check(player, previous_piece_moved){
 }
 
 export function get_legal_moves(player, previous_piece_moved){
-    //console.log(`checking if ${player} has any legal moves...`)
     if (player == 'white'){
         var king = white_king
         var check_value = 101
@@ -112,13 +111,19 @@ export function get_legal_moves(player, previous_piece_moved){
                             legal_moves.push(row)
                             legal_moves.push(col)
                             legal_moves.push(taken_piece)
+                            if (taken_piece != null){
+                                if (taken_piece.identifier == 1 || taken_piece.identifier == 17){
+                                    console.log("WHY IS THIS HAPPENING??")
+                                    console.log(board_array[row][col])
+                                }
+                            }
+                            
                         }
                     }
 
                     if (board_array[row][col] == castle_value){
-
+                        
                         if (king.first_turn == true){
-
                             var castle_col = null
                             var in_check = check_for_check(player, previous_piece_moved)
 
@@ -188,13 +193,15 @@ export function generate_random_legal_move(moves){
     var x = Math.floor(Math.random() * no_moves)
 
     var move = [moves[x * 4], moves[(x * 4) + 1], moves[(x * 4) + 2], moves[(x * 4) + 3], moves[x * 4].x, moves[x * 4].y]
+    // at this point, the original move piece .x and .y values are incorrect (referring to the big bug)
 
     return move
 }
 
 export function play_move(move){
 
-    // move = [original piece, moving to y, moving to x, taken piece, moving from x, moving from y] WHAT THE FUCK>?
+    // move = [original piece, moving to y, moving to x, taken piece, moving from x, moving from y] WHAT THE FUCK>? (this comes from generate random legal move)
+    
     // IF CASTLING: move = [castle, castle to x, castle to y, king, castle from x, castle from y]
 
     if (move[3] != null){
@@ -274,6 +281,8 @@ function simulate_move(move){ // very similar to play_move, but it has to save a
     // move = [original piece, moving to y, moving to x, taken piece, moving from x, moving from y]
     // IF CASTLING: move = [castle, castle to x, castle to y, king, castle from x, castle from y]
 
+    //something is wrong with this function or how it is applied - castling console.logs show up when they shouldn't
+
     if (move[3] != null){
         if (move[3].identifier == 1 || move[3].identifier == 17){ // taken piece is king, this only happens during castling.
 
@@ -294,8 +303,11 @@ function simulate_move(move){ // very similar to play_move, but it has to save a
                 move[3].x = 6 + increment
             }
 
-            console.log(`castle x: ${move[0].x}`)
-            console.log(`king x: ${move[3].x}`)
+            console.log('\n')
+            console.log(`${move[0].colour}, ${move[0].type}`)
+            console.log(`${move[3].colour}, ${move[3].type}`)
+            console.log(`original x: ${move[0].x}`)
+            console.log(`taken x: ${move[3].x}`)
         }
         else{
             move[0].y = move[1]
@@ -327,6 +339,7 @@ function simulate_move(move){ // very similar to play_move, but it has to save a
 
 class engine{
     constructor(){
+        this.max_depth = 9
         this.depth = undefined
         this.depth_count = 0
         this.original_board = [] // it cannot reference the game_board, in case that gets flipped during processing time and fucks it up
@@ -378,6 +391,11 @@ class engine{
         })
 
         this.original_board = [alive_pieces, dead_pieces]
+    }
+
+    convert_move(moves){
+        var move = [moves[0], moves[1], moves[2], moves[3], moves[0].x, moves[0].y]
+        return move
     }
 
 
@@ -557,24 +575,13 @@ class engine{
     }
 
     evaluate(move, turn, previous_piece_moved, number, branching_factor){ // a single possible move is passed in. evaluate it.
-        //console.log("\n")
-        console.log(`number: ${number}`)
-        //console.log(move)
-        //console.log(this.saved_depth_3)
+
         if (turn == 'white'){
             var opponent = 'black'
-            var own_pieces = white_pieces
-            var own_king = white_king
-            var opp_pieces = black_pieces
-            var opp_king = black_king
         }
     
         if (turn == 'black'){
             var opponent = 'white'
-            var own_pieces = black_pieces
-            var own_king = black_king
-            var opp_pieces = white_pieces
-            var opp_king = white_king
         }
 
         if (branching_factor == 1){
@@ -590,21 +597,22 @@ class engine{
         }
 
         if (number + 1 > this.depth){
-            console.log('maximum depth reached!')
             return 0
         }
         // The possible move needs to be simulated. 
-        simulate_move(move)
+        play_move(move)
         game_board.clear_array()
     
         // See if this move delivers a checkmate
         var opp_moves = get_legal_moves(opponent, previous_piece_moved)
         var in_check = check_for_check(opponent, previous_piece_moved)
-        if (in_check == true && opp_moves.length == 0){
-            console.log('returning 1000!!')
-            console.log(move)
-            
+
+        if (in_check == true && opp_moves.length == 0){            
             return 1000
+        }
+
+        else if (in_check == false && opp_moves.length == 0){
+            return 0
         }
 
         // Threading (change branching factor if needed) FUCK YES
@@ -615,19 +623,21 @@ class engine{
 
             // loop through all of the opponent's moves (there will be as many moves as the branching factor)
             for (let i=0; i<opp_moves.length / 4; i++){
-                simulate_move([opp_moves[i * 4], opp_moves[(i * 4) + 1], opp_moves[(i * 4) + 2], opp_moves[(i * 4) + 3]])
+
+
+                play_move([opp_moves[i * 4], opp_moves[(i * 4) + 1], opp_moves[(i * 4) + 2], opp_moves[(i * 4) + 3]])
                 game_board.clear_array()
                 this.save_depth(number)
+
                 var own_moves = get_legal_moves(turn, opp_moves[i * 4])
                 var m
-
                 var possible_response = false
 
                 // loop through all own moves in response.
                 for (let x=0; x<own_moves.length / 4; x++){
                     this.change_depth_move(number)
                     m = [own_moves[x * 4], own_moves[(x * 4) + 1], own_moves[(x * 4) + 2], own_moves[(x * 4) + 3]]
-                    var move_value = this.evaluate(m, turn, m[0], number, branching_factor)
+                    var move_value = this.evaluate(m, turn, m[0], number, branching_factor) //m[0] is wrong
 
                     // if any of the moves are NOT check mates, certain is false
                     if (move_value >= 1000 - this.depth){
@@ -654,35 +664,22 @@ class engine{
     computer_program_turn(turn, previous_piece_moved){ // get all your own legal moves.
 
         this.reset()
-
+    
         var moves = get_legal_moves(turn, previous_piece_moved) // all your own legal moves
+        // get legal moves returns 4 (original piece, moving to x, moving to y, taken)
     
-    
-        var all_move_values = []
         var m
+        var all_move_values = []
         for (let i=0; i<moves.length / 4; i++){
             //need to go back to sequence[0] to reverse the simulation of the move in the evaluation.
             game_board.change_move(0)
-    
+            game_board.clear_array()
+        
             //evaluate each move.
             m = [moves[i * 4], moves[(i * 4) + 1], moves[(i * 4) + 2], moves[(i * 4) + 3]]
+            var move_value = this.evaluate(m, turn, moves[i * 4], 0, 1) // PREVIOUS_PIECE_MOVED WILL NEED TO BE CHANGED TO YOUR OWN PIECE WHICH WAS HYPOTHETICALLY MOVED
 
-            var move_value = this.evaluate(m, turn, moves[i * 4], 0, 1)
-
-            if (move_value >= 1000 - this.depth){
-                all_move_values.push(move_value)
-                if (move_value == 1000){
-                    console.log('breaking!')
-                    break
-                }
-            }
-
-            game_board.change_move(0)
-
-            if (move_value < 1000 - this.depth){
-                var move_value = this.evaluate(m, turn, moves[i * 4], 0, 2) // PREVIOUS_PIECE_MOVED WILL NEED TO BE CHANGED TO YOUR OWN PIECE WHICH WAS HYPOTHETICALLY MOVED
-                all_move_values.push(move_value)
-            }
+            all_move_values.push(move_value)
         }
     
         // Get the move(s) with the highest value.
@@ -718,117 +715,8 @@ class engine{
 
 
 
+
+
 export var computer_engine = new engine()
 
 
-
-
-
-
-
-
-
-
-
-
-
-function evaluate(move, turn, previous_piece_moved){ // a single possible move is passed in. evaluate it.
-    if (turn == 'white'){
-        var opponent = 'black'
-        var own_pieces = white_pieces
-        var own_king = white_king
-        var opp_pieces = black_pieces
-        var opp_king = black_king
-    }
-
-    if (turn == 'black'){
-        var opponent = 'white'
-        var own_pieces = black_pieces
-        var own_king = black_king
-        var opp_pieces = white_pieces
-        var opp_king = white_king
-    }
-
-
-    // Zeroeth, the possible move needs to be simulated. 
-    simulate_move(move)
-    game_board.clear_array()
-
-    // First, see if this move delivers a checkmate, or a forced checkmate in three moves.
-    var opp_moves = get_legal_moves(opponent, previous_piece_moved)
-    var in_check = check_for_check(opponent, previous_piece_moved)
-
-    if (in_check == true && opp_moves.length == 0){
-        console.log('returning 1000!!')
-        return 1000
-    }
-
-
-    if (opp_moves.length == 1){ // the opposition only has one move to make.
-
-        simulate_move(opp_moves) //get the opposition to play that move.
-        var own_moves = get_legal_moves(turn, opp_moves[0]) // all own moves in response.
-        var m
-
-        for (let i=0; i<own_moves.length / 4; i++){
-            // save this move somehow
-            m = [own_moves[i * 4], own_moves[(i * 4) + 1], own_moves[(i * 4) + 2], own_moves[(i * 4) + 3]]
-
-            evaluate(m, turn, m[0]) //would a recursive work here?
-        }
-
-    }
-
-
-    return 0
-
-}
-
-
-
-export function computer_program_turn(turn, previous_piece_moved){ // get all your own legal moves.
-
-    var moves = get_legal_moves(turn, previous_piece_moved) // all your own legal moves
-
-
-    var all_move_values = []
-    var m
-    for (let i=0; i<moves.length / 4; i++){
-        //need to go back to sequence[0] to reverse the simulation of the move in the evaluation.
-        game_board.change_move(0)
-
-        //evaluate each move.
-        m = [moves[i * 4], moves[(i * 4) + 1], moves[(i * 4) + 2], moves[(i * 4) + 3]]
-        var move_value = evaluate(m, turn, moves[i * 4]) // PREVIOUS_PIECE_MOVED WILL NEED TO BE CHANGED TO YOUR OWN PIECE WHICH WAS HYPOTHETICALLY MOVED
-        all_move_values.push(move_value)
-    }
-
-    // Get the move(s) with the highest value.
-    var max_value = Math.max(...all_move_values)
-    var indexes = get_all_indexes(all_move_values, max_value)
-
-
-    var best_moves = []
-    indexes.forEach(i => {
-        best_moves.push(moves[i * 4])
-        best_moves.push(moves[(i * 4) + 1])
-        best_moves.push(moves[(i * 4) + 2])
-        best_moves.push(moves[(i * 4) + 3])
-    })
-
-    var final_move = generate_random_legal_move(best_moves)
-    game_board.change_move(0)
-
-    return final_move
-
-}
-
-function get_all_indexes(array, value){
-    var indexes = []
-    for (let i=0; i<array.length; i++){
-        if (array[i] == value){
-            indexes.push(i)
-        }
-    }
-    return indexes
-}
